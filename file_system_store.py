@@ -49,7 +49,7 @@ class FileSystemStore:
     def get_hierarchy(self):
         return self.root_dir
 
-# test 
+# test example
 fs = FileSystemStore("/", "/path/to/root_dir/")
 
 fs.add_files([
