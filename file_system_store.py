@@ -7,19 +7,34 @@ class FileSystemStore:
 
     def add_file(self, path):
         cur_dir = self.root_dir
+        cur_path = ""
         segments = path.split(self.separator)
         seg_no = len(segments)
-        if seg_no > 1: # File with directory in path
+        if seg_no > 1:   # File with directory in path
             for i in range(0, seg_no-1):
                 segment = segments[i]
+                # Create Dir
                 if segment != "":
+                    cur_path = cur_path + segment + self.separator
                     if segment not in cur_dir.keys():
-                        cur_dir[segment] = {}
+                        cur_dir[segment] = {
+                            "_type": "dir",
+                            "_path": cur_path                            
+                        }
                     cur_dir = cur_dir[segment]
-            cur_dir[segments[seg_no-1]] = {}
+            # Create File in Dir
+            cur_path = cur_path + segments[seg_no-1]
+            cur_dir[segments[seg_no-1]] = {
+                "_type": "file",
+                "_path": cur_path
+            }
         elif seg_no == 1: # File in root directory
+            # Create File in Root
             if segments[0] != "":
-                cur_dir[segments[0]] = {}
+                cur_dir[segments[0]] = {
+                    "_type": "file",
+                    "_path": cur_path + segments[0]
+                }
         else:
             pass
 
