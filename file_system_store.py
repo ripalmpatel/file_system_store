@@ -1,13 +1,17 @@
 # FileSystemStore keeps track of added files and generated hierarchical directory structure
+import pprint
 
 class FileSystemStore:
-    def __init__(self, separator):
+    def __init__(self, separator, root_dir_path):
         self.separator = separator
-        self.root_dir = {}
+        self.root_dir = {
+            "_type": "dir",
+            "_path": root_dir_path
+        }
 
     def add_file(self, path):
         cur_dir = self.root_dir
-        cur_path = ""
+        cur_path = self.root_dir["_path"]
         segments = path.split(self.separator)
         seg_no = len(segments)
         if seg_no > 1:   # File with directory in path
@@ -46,39 +50,16 @@ class FileSystemStore:
         return self.root_dir
 
 # test 
-fs = FileSystemStore('/')
+fs = FileSystemStore("/", "/path/to/root_dir/")
 
 fs.add_files([
-    'dir1/dir2/xyz.xls', 
-    'dir2/dir1/abc.csv',
-    'dir-a/dir/file.jpeg',
-    'dir-b/',
-    'dir-x/dir-y/dir-z/abc.csv',
+    "dir1/dir2/xyz.xls",
+    "dir1/dir1-file.xls", 
+    "dir2/dir1/abc.csv",
+    "dir-a/dir/file.jpeg",
+    "dir-b/",
+    "dir-x/dir-y/dir-z/abc.csv",
+    "dir-x/dir-y/dir-z/xyz.csv",
 ])
 
-print(fs.get_hierarchy())
-#   {
-#       'dir1': {
-#           'dir2': {
-#               'xyz.xls': {}
-#           }
-#       }, 
-#       'dir2': {
-#           'dir1': {
-#               'abc.csv': {}
-#           }
-#       }, 
-#       'dir-a': {
-#           'dir': {
-#               'file.jpeg': {}
-#           }
-#       }, 
-#       'dir-b': {}, 
-#       'dir-x': {
-#           'dir-y': {
-#               'dir-z': {
-#                   'abc.csv': {}
-#               }
-#           }
-#       }
-#  }
+pprint.pprint(fs.get_hierarchy())
